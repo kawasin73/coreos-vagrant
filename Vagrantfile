@@ -63,12 +63,14 @@ Vagrant.configure("2") do |config|
   # forward ssh agent to easily ssh into the different machines
   config.ssh.forward_agent = true
 
-  config.vm.box = "coreos-alpha"
-  config.vm.box_url = "https://alpha.release.core-os.net/amd64-usr/current/coreos_production_vagrant_virtualbox.json"
+  config.vm.boot_timeout = 3600
+
+  config.vm.box = "coreos-stable"
+  config.vm.box_url = "https://stable.release.core-os.net/amd64-usr/current/coreos_production_vagrant_virtualbox.json"
 
   ["vmware_fusion", "vmware_workstation"].each do |vmware|
     config.vm.provider vmware do |v, override|
-      override.vm.box_url = "https://alpha.release.core-os.net/amd64-usr/current/coreos_production_vagrant_vmware_fusion.json"
+      override.vm.box_url = "https://stable.release.core-os.net/amd64-usr/current/coreos_production_vagrant_vmware_fusion.json"
     end
   end
 
@@ -136,7 +138,8 @@ Vagrant.configure("2") do |config|
         config.ignition.config_obj = vb
       end
 
-      ip = "172.17.8.#{i+100}"
+      # ip = "172.17.8.#{i+100}"
+      ip = "10.0.2.15"
       config.vm.network :private_network, ip: ip
       # This tells Ignition what the IP for eth1 (the host-only adapter) should be
       config.ignition.ip = ip
@@ -167,6 +170,9 @@ Vagrant.configure("2") do |config|
           config.ignition.path = 'config.ign'
         end
       end
+
+      # config.vm.provision "shell", inline: <<-SHELL
+      # SHELL
     end
   end
 end
